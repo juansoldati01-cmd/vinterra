@@ -60,7 +60,7 @@ export default function Home() {
             <em className="italic">mínima intervención</em>
           </h1>
           <Link
-            href="/carrito"
+            href="/vinos"
             className="mt-8 inline-block border border-white text-white text-xs tracking-widest uppercase px-6 py-3 hover:bg-white hover:text-stone-900 transition-colors w-fit"
           >
             Ver vinos →
