@@ -41,9 +41,8 @@ const VINOS = [
 
 const FILTROS = [
   { label: "Todos los vinos", value: "todos" },
-  { label: "Nuna Dèmeter Red Blend", value: "nuna-red-blend" },
-  { label: "Estate Selection", value: "estate-selection" },
-  { label: "Nuna Dèmeter White Blend", value: "nuna-white-blend" },
+  { label: "Tintos", value: "Tinto" },
+  { label: "Blancos", value: "Blanco" },
 ];
 
 function descuento(precio: number) {
@@ -55,7 +54,7 @@ export default function VinosPage() {
 
   const vinosFiltrados = filtro === "todos"
     ? VINOS
-    : VINOS.filter((v) => v.id === filtro);
+    : VINOS.filter((v) => v.categoria === filtro);
 
   return (
     <div className="min-h-screen bg-[#ede8de]">
