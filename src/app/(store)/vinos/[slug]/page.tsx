@@ -1,48 +1,80 @@
-import { client } from "@/../sanity/lib/client";
-import { VINO_BY_SLUG_QUERY } from "@/../sanity/lib/queries";
-import { urlForImage } from "@/../sanity/lib/image";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import type { Vino } from "@/types";
-import AgregarCarritoBtn from "@/components/vinos/AgregarCarritoBtn";
+import { VINOS } from "../page";
+import AddToCartHome from "@/components/vinos/AddToCartHome";
 
-export const dynamic = "force-dynamic";
+function descuento(precio: number) {
+  return Math.round(precio * 0.6);
+}
 
-export default async function VinoPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function VinoDetallePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const vino: Vino | null = await client.fetch(VINO_BY_SLUG_QUERY, { slug });
-
+  const vino = VINOS.find((v) => v.slug === slug);
   if (!vino) notFound();
 
+  const precio = descuento(vino.precioOriginal);
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
-          {vino.imagen ? (
+    <div className="min-h-screen bg-[#ede8de]">
+      <div className="max-w-6xl mx-auto px-6 py-12">
+
+        {/* Breadcrumb */}
+        <p className="text-xs tracking-widest uppercase text-stone-400 mb-10">
+          <a href="/vinos" className="hover:text-stone-700 transition-colors">Vinos</a>
+          {" · "}
+          <span>{vino.nombre}</span>
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-stone-400">
+          {/* Botella */}
+          <div className="relative bg-[#ede8de] flex items-center justify-center p-16 border-b md:border-b-0 md:border-r border-stone-400" style={{ minHeight: "520px" }}>
             <Image
-              src={urlForImage(vino.imagen).width(600).height(600).url()}
-              alt={vino.nombre}
-              fill
-              className="object-cover"
+              src={vino.imagen}
+              alt={`${vino.nombre} ${vino.subtitulo}`}
+              width={220}
+              height={480}
+              className="object-contain h-[420px] w-auto"
+              priority
             />
-          ) : (
-            <div className="flex items-center justify-center h-full text-8xl">🍷</div>
-          )}
-        </div>
-        <div className="flex flex-col justify-center">
-          <span className="text-amber-600 text-sm font-semibold capitalize">{vino.tipo}</span>
-          <h1 className="text-3xl font-bold text-stone-900 mt-2 mb-1">{vino.nombre}</h1>
-          <p className="text-stone-500 mb-4">{vino.bodega} · {vino.varietal} · {vino.anada}</p>
-          {vino.descripcion && (
-            <p className="text-stone-600 leading-relaxed mb-6">{vino.descripcion}</p>
-          )}
-          <p className="text-3xl font-bold text-stone-900 mb-2">
-            ${vino.precio.toLocaleString("es-AR")}
-          </p>
-          <p className="text-sm text-stone-400 mb-6">
-            {vino.stock > 0 ? `${vino.stock} unidades disponibles` : "Sin stock"}
-          </p>
-          <AgregarCarritoBtn vino={vino} />
+          </div>
+
+          {/* Info */}
+          <div className="flex flex-col justify-between p-10">
+            <div>
+              <p className="text-xs tracking-widest uppercase text-stone-400 mb-4">{vino.categoria} · Chakana Wines</p>
+              <h1 className="text-4xl font-serif text-stone-900 leading-tight">{vino.nombre}</h1>
+              <p className="text-2xl font-serif italic text-stone-600 mt-1 mb-6">{vino.subtitulo}</p>
+              <p className="text-stone-600 text-sm leading-loose border-t border-stone-300 pt-6">{vino.descripcion}</p>
+
+              <div className="mt-8 grid grid-cols-2 gap-4 text-xs tracking-widest uppercase">
+                <div>
+                  <p className="text-stone-400 mb-1">Formato</p>
+                  <p className="text-stone-700">{vino.formato}</p>
+                </div>
+                <div>
+                  <p className="text-stone-400 mb-1">Categoría</p>
+                  <p className="text-stone-700">{vino.categoria}</p>
+                </div>
+                <div>
+                  <p className="text-stone-400 mb-1">Bodega</p>
+                  <p className="text-stone-700">Chakana Wines</p>
+                </div>
+                <div>
+                  <p className="text-stone-400 mb-1">País</p>
+                  <p className="text-stone-700">Argentina</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 border-t border-stone-400 pt-6">
+              <div className="flex items-baseline gap-3 mb-6">
+                <span className="text-3xl font-light text-stone-900">${precio.toLocaleString("es-AR")}</span>
+                <span className="text-stone-400 line-through text-sm">${vino.precioOriginal.toLocaleString("es-AR")}</span>
+                <span className="text-stone-500 text-xs tracking-widest uppercase">−40% online</span>
+              </div>
+              <AddToCartHome vino={{ ...vino, precio }} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

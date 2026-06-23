@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import AddToCartHome from "@/components/vinos/AddToCartHome";
 
-const VINOS = [
+export const VINOS = [
   {
     id: "nuna-red-blend",
     nombre: "Nuna Dèmeter",
@@ -65,7 +66,7 @@ export default function VinosPage() {
         <h1 className="text-3xl md:text-4xl font-serif text-stone-900">Catálogo de Vinos</h1>
       </div>
 
-      {/* Viñetas / filtros */}
+      {/* Filtros */}
       <div className="max-w-7xl mx-auto px-6 py-5 border-b border-stone-400 flex flex-wrap gap-3">
         {FILTROS.map((f) => (
           <button
@@ -85,9 +86,9 @@ export default function VinosPage() {
         </span>
       </div>
 
-      {/* Grid de vinos */}
+      {/* Grid */}
       <div className="max-w-7xl mx-auto">
-        <div className={`grid grid-cols-1 divide-y border-b border-stone-400 ${vinosFiltrados.length > 1 ? "md:grid-cols-3 md:divide-y-0 md:divide-x divide-stone-400" : "md:grid-cols-1"}`}>
+        <div className={`grid grid-cols-1 divide-y border-b border-stone-400 ${vinosFiltrados.length > 1 ? "md:grid-cols-3 md:divide-y-0 md:divide-x divide-stone-400" : ""}`}>
           {vinosFiltrados.map((vino, i) => {
             const precio = descuento(vino.precioOriginal);
             return (
@@ -102,54 +103,47 @@ export default function VinosPage() {
                   </span>
                 </div>
 
-                <div className={`flex flex-col flex-1 ${vinosFiltrados.length === 1 ? "md:flex-row" : ""}`}>
-                  {/* Botella */}
-                  <div className={`relative bg-[#e8e2d6] flex items-end justify-center px-8 pt-10 ${vinosFiltrados.length === 1 ? "md:w-1/2 md:h-[500px]" : ""}`} style={vinosFiltrados.length > 1 ? { height: "380px" } : { height: "420px" }}>
-                    <button className="absolute top-4 right-4 text-stone-300 hover:text-stone-600 transition-colors text-lg">♡</button>
+                <div className="flex flex-col flex-1">
+                  {/* Botella — fondo igual a la página */}
+                  <Link href={`/vinos/${vino.slug}`} className="relative bg-[#ede8de] flex items-end justify-center px-8 pt-10 cursor-pointer" style={{ height: "380px" }}>
+                    <button className="absolute top-4 right-4 text-stone-300 hover:text-stone-600 transition-colors text-lg z-10">♡</button>
                     <Image
                       src={vino.imagen}
                       alt={`${vino.nombre} ${vino.subtitulo}`}
                       width={160}
                       height={340}
-                      className={`object-contain w-auto group-hover:scale-105 transition-transform duration-500 ${vinosFiltrados.length === 1 ? "h-[420px]" : "h-[300px]"}`}
+                      className="object-contain h-[300px] w-auto group-hover:scale-105 transition-transform duration-500"
                       priority={i === 0}
                     />
-                  </div>
+                  </Link>
 
                   {/* Info */}
-                  <div className={`flex flex-col flex-1 ${vinosFiltrados.length === 1 ? "md:w-1/2 md:justify-center md:px-16 md:py-12" : ""}`}>
-                    <div className="px-5 pt-5 pb-0 border-t border-stone-400">
+                  <div className="px-5 pt-5 pb-0 border-t border-stone-400">
+                    <Link href={`/vinos/${vino.slug}`} className="hover:opacity-70 transition-opacity">
                       <p className="font-serif text-stone-900 text-base leading-tight">{vino.nombre}</p>
                       <p className="font-serif italic text-stone-600 text-base leading-tight">{vino.subtitulo}</p>
-                    </div>
-
-                    {vinosFiltrados.length === 1 && (
-                      <div className="px-5 pt-4">
-                        <p className="text-sm text-stone-500 leading-relaxed">{vino.descripcion}</p>
-                      </div>
-                    )}
-
-                    <div className="px-5 py-3 border-t border-stone-300 mt-4">
-                      <span className="text-[10px] tracking-widest uppercase text-stone-400">{vino.formato}</span>
-                    </div>
-
-                    <div className="flex items-stretch border-t border-stone-400">
-                      <div className="px-5 py-4 flex items-center gap-2">
-                        <span className="text-stone-900 font-medium text-sm">${precio.toLocaleString("es-AR")}</span>
-                        <span className="text-stone-400 line-through text-xs">${vino.precioOriginal.toLocaleString("es-AR")}</span>
-                      </div>
-                      <div className="ml-auto border-l border-stone-400">
-                        <AddToCartHome vino={{ ...vino, precio }} />
-                      </div>
-                    </div>
+                    </Link>
                   </div>
+
+                  <div className="px-5 py-3 border-t border-stone-300 mt-4">
+                    <span className="text-[10px] tracking-widest uppercase text-stone-400">{vino.formato}</span>
+                  </div>
+
+                  {/* Precio */}
+                  <div className="px-5 py-3 flex items-center gap-2 border-t border-stone-400">
+                    <span className="text-stone-900 font-medium text-sm">${precio.toLocaleString("es-AR")}</span>
+                    <span className="text-stone-400 line-through text-xs">${vino.precioOriginal.toLocaleString("es-AR")}</span>
+                    <span className="text-stone-400 text-xs">−40%</span>
+                  </div>
+
+                  {/* Selector cantidad + agregar */}
+                  <AddToCartHome vino={{ ...vino, precio }} />
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-
     </div>
   );
 }
