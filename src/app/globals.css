@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f0e8;
+  --background: #ede8de;
   --foreground: #1a1a1a;
 }
 
@@ -12,4 +12,13 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
 }

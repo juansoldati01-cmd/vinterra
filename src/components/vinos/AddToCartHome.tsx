@@ -36,7 +36,7 @@ export default function AddToCartHome({ vino }: { vino: VinoSimple }) {
   return (
     <button
       onClick={handleAgregar}
-      className="w-full border border-stone-900 text-stone-900 text-xs tracking-widest uppercase py-3 hover:bg-stone-900 hover:text-[#f5f0e8] transition-colors"
+      className="h-full px-5 py-4 text-[10px] tracking-widest uppercase text-stone-600 hover:bg-stone-900 hover:text-[#ede8de] transition-colors whitespace-nowrap"
     >
       {agregado ? "✓ Agregado" : "Agregar al carrito"}
     </button>
