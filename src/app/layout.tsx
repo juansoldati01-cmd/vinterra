@@ -1,23 +1,27 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Libre_Baskerville, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const baskerville = Libre_Baskerville({ subsets: ["latin"], weight: ["400", "700"], style: ["normal", "italic"], variable: "--font-baskerville" });
 
 export const metadata: Metadata = {
-  title: "Vinterra — Vinos de calidad",
-  description: "Descubrí los mejores vinos argentinos. Compra online con envío a todo el país.",
+  title: "Vinterra — Vinos Naturales",
+  description: "Selección de vinos naturales y biodinámicos. Elaborados con mínima intervención. Envío a todo el país.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body className={`${inter.className} bg-stone-50 text-stone-900 min-h-screen flex flex-col`}>
+    <html lang="es" className={`${inter.variable} ${baskerville.variable}`}>
+      <body className="font-[var(--font-inter)] bg-[#f5f0e8] text-stone-900 min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1">{children}</main>
-        <footer className="bg-stone-900 text-stone-400 text-center text-sm py-8 mt-16">
-          © 2024 Vinterra · Todos los derechos reservados
+        <footer className="border-t border-stone-300 py-8 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs tracking-widest uppercase text-stone-400">
+            <span>Vinterra · Vinos Naturales</span>
+            <span>© 2024 · Todos los derechos reservados</span>
+          </div>
         </footer>
       </body>
     </html>

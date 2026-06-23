@@ -1,24 +1,27 @@
 "use client";
 import Link from "next/link";
 import { useCarrito } from "@/store/carritoStore";
-import { ShoppingCart, Wine } from "lucide-react";
 
 export default function Navbar() {
   const cantidadTotal = useCarrito((s) => s.cantidadTotal);
 
   return (
-    <nav className="sticky top-0 z-50 bg-stone-900 text-stone-100 shadow-md">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-wide text-amber-400">
-          <Wine size={24} />
+    <nav className="w-full border-b border-stone-300 bg-[#f5f0e8]">
+      <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between text-xs tracking-widest uppercase font-medium text-stone-700">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="hover:text-stone-900 transition-colors">Inicio</Link>
+          <Link href="/vinos" className="hover:text-stone-900 transition-colors">Vinos</Link>
+        </div>
+
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-sm tracking-[0.3em] uppercase font-semibold text-stone-900">
           Vinterra
         </Link>
-        <div className="flex items-center gap-6 text-sm font-medium">
-          <Link href="/vinos" className="hover:text-amber-400 transition-colors">Vinos</Link>
-          <Link href="/carrito" className="relative hover:text-amber-400 transition-colors">
-            <ShoppingCart size={22} />
+
+        <div className="flex items-center gap-6">
+          <Link href="/carrito" className="relative hover:text-stone-900 transition-colors flex items-center gap-1">
+            Carrito
             {cantidadTotal() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-amber-500 text-stone-900 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="bg-stone-900 text-[#f5f0e8] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                 {cantidadTotal()}
               </span>
             )}
